@@ -4,10 +4,20 @@
 
 #include "World.h"
 
-World::World() {
-    // Subscribe to the collision events
-    eventManager.subscribe<CollisionEvent>([](const CollisionEvent& collision){
+#include <iostream>
 
+// Assignment 5: Free function to handle collision events (standalone function, not part of a class)
+void onCollisionDetected(const CollisionEvent& collision) {
+    std::cout << "A collision occurred between entity A and entity B" << std::endl;
+}
+
+World::World() {
+
+    // Assignment 5: Subscribing to the free function above
+    eventManager.subscribe<CollisionEvent>(onCollisionDetected);
+
+    // [Tutorial Lambda] Subscribe to the collision events
+    eventManager.subscribe<CollisionEvent>([](const CollisionEvent& collision){
         if (collision.entityA == nullptr || collision.entityB == nullptr) return;
 
         if (!collision.entityA->hasComponent<Collider>() && collision.entityB->hasComponent<Collider>()) return;
@@ -30,7 +40,6 @@ World::World() {
         if (player && item) {
             item->destroy();
         }
-
-
     });
+
 }
