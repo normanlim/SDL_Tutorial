@@ -15,6 +15,7 @@ if (WIN32)
             ${PROJECT_SOURCE_DIR}/src/utils
             ${PROJECT_SOURCE_DIR}/src/ecs
             ${PROJECT_SOURCE_DIR}/src/ecs/system
+            ${PROJECT_SOURCE_DIR}/src/vendor
     )
 
     link_directories(${SDL3_PATH}/lib)
@@ -29,7 +30,8 @@ add_executable(Tutorial_1 src/main.cpp
         src/utils/Vector2D.cpp
         src/utils/Collision.cpp
         src/ecs/system/CollisionSystem.cpp
-        src/ecs/World.cpp)
+        src/ecs/World.cpp
+        src/vendor/tinyxml2.cpp)
 
 target_link_libraries(Tutorial_1
     SDL3

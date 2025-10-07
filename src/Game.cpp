@@ -8,7 +8,7 @@
 #include "Map.h"
 //#include "GameObject.h"
 
-Map *map = nullptr;
+// Map *map = nullptr; // removed lecture 6
 //GameObject *player = nullptr;
 
 Game::Game() {}
@@ -73,12 +73,30 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
         isRunning = false;
     }
 
-    map = new Map();
+    // Load our map
+    world.getMap().load("../asset/map.tmx", TextureManager::load("../asset/tileset.png"));
+    for (auto &collider : world.getMap().colliders) {
+        auto& e = world.createEntity();
+        e.addComponent<Transform>(Vector2D(collider.rect.x, collider.rect.y), 0.0f, 1.0f);
+        auto& c = e.addComponent<Collider>("wall");
+        c.rect.x = collider.rect.x;
+        c.rect.y = collider.rect.y;
+        c.rect.w = collider.rect.w;
+        c.rect.h = collider.rect.h;
+
+        // Just to have a visual of the colliders.
+        SDL_Texture* tex = TextureManager::load("../asset/tileset.png");
+        SDL_FRect colSrc { 0,32,32,32 };
+        SDL_FRect colDst { c.rect.x, c.rect.y, c.rect.w, c.rect.h };
+        e.addComponent<Sprite>(tex,colSrc,colDst);
+
+    }
+    // map = new Map(); // Removed lecture 6
     //player = new GameObject("../asset/ball.png", 0, 0);
 
     // Add entities
     auto& item(world.createEntity());
-    auto& itemTransform = item.addComponent<Transform>(Vector2D(100,200), 0.0f, 1.0f);
+    auto& itemTransform = item.addComponent<Transform>(Vector2D(200,100), 0.0f, 1.0f);
 
     SDL_Texture* itemTex = TextureManager::load("../asset/coin.png");
     SDL_FRect itemSrc { 0,0,32,32 };
@@ -180,7 +198,7 @@ void Game::render() {
     SDL_RenderClear(renderer); // every frame the renderer is cleared with the draw color
 
     // All your drawing will go here...
-    map->draw();
+    // map->draw();
     //player->draw();
     world.render();
 

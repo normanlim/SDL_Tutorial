@@ -12,10 +12,13 @@
 #include "Entity.h"
 #include "EventManager.h"
 #include "KeyboardInputSystem.h"
+#include "Map.h"
 #include "MovementSystem.h"
 #include "RenderSystem.h"
 
 class World {
+    Map map;
+
     std::vector<std::unique_ptr<Entity>> entities;
 
     MovementSystem movementSystem;
@@ -33,6 +36,7 @@ public:
         cleanup();
     }
     void render() {
+        map.draw();
         renderSystem.render(entities);
     }
 
@@ -58,6 +62,8 @@ public:
     }
 
     EventManager& getEventManager() { return eventManager; }
+
+    Map& getMap() { return map; }
 
 };
 

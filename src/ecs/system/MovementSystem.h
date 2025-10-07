@@ -21,6 +21,9 @@ public:
                 // tr.position.x += 60 * dt;
                 // tr.position.y += 60* dt; // no longer need code to move diagnoally, doing input based movement now
 
+                // Check previous frame's position
+                tr.oldPosition = tr.position;
+
                 Vector2D directionVec = ve.direction;
 
                 // normalizing magnitude (didnt happen yet)
