@@ -75,7 +75,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
         isRunning = false;
     }
 
-    AssetManager::loadAnimation("player","../asset/animations/bull_animations.xml");
+    AssetManager::loadAnimation("player","../asset/animations/piggy_animations.xml");
 
 
     // Load our map
@@ -149,7 +149,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
     Animation anim = AssetManager::getAnimation("player");
     player.addComponent<Animation>(anim);
 
-    SDL_Texture* tex = TextureManager::load("../asset/animations/bull_anim.png");
+    SDL_Texture* tex = TextureManager::load("../asset/animations/piggy_anim.png");
     // SDL_FRect playerSrc { 0,0,32,44};
     SDL_FRect playerSrc = anim.clips[anim.currentClip].frameIndicies[0]; // new one for bull
     SDL_FRect playerDst { playerTransform.position.x, playerTransform.position.y, 64, 64};

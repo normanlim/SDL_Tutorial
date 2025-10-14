@@ -28,9 +28,13 @@ class AnimationSystem {
                     newClip = "walk_right";
                 } else if (velocity.direction.x < 0.0f) {
                     newClip = "walk_left";
+                } else if (velocity.direction.y > 0.0f) {
+                    newClip = "walk_down";
+                } else if (velocity.direction.y < 0.0f) {
+                    newClip = "walk_up";
                 }
                 else {
-                    newClip = "idle_right";
+                    newClip = "idle";
                 }
 
                 // Check if the animation has switched!
