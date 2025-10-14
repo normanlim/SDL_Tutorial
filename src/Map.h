@@ -22,7 +22,7 @@ public:
 
     // void load(int data[10][15]); // no longer using hard-coded data
     void load(const char* path, SDL_Texture *ts);
-    void draw();
+    void draw(const Camera& cam);
 
     SDL_Texture *tileset = nullptr;
     int width{}, height{};

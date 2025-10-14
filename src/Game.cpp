@@ -134,11 +134,17 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
     // itemCollider.rect.h = itemDest.h;
 
 
+    // Add our camera
+    auto& cam = world.createEntity();
+    SDL_FRect camView{};
+    camView.w = width;
+    camView.h = height;
+    cam.addComponent<Camera>(camView, world.getMap().width * 32, world.getMap().height * 32);
 
 
     auto& player(world.createEntity());
     auto& playerTransform = player.addComponent<Transform>(Vector2D(0,0), 0.0f, 1.0f);
-    player.addComponent<Velocity>(Vector2D(0.0f, 0.0f), 60.0f); // Add number here for initial velocity on gameload
+    player.addComponent<Velocity>(Vector2D(0.0f, 0.0f), 120.0f); // Add number here for initial velocity on gameload
 
     Animation anim = AssetManager::getAnimation("player");
     player.addComponent<Animation>(anim);
@@ -153,6 +159,8 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
     auto& playerCollider = player.addComponent<Collider>("player");
     playerCollider.rect.w = playerDst.w;
     playerCollider.rect.h = playerDst.h;
+
+    player.addComponent<PlayerTag>();
 
 
 

@@ -51,4 +51,12 @@ struct Animation {
     float speed = 0.1f; // time per frame
 };
 
+struct Camera {
+    SDL_FRect view;
+    float worldWidth;
+    float worldHeight;
+};
+
+struct PlayerTag{};
+
 #endif //TUTORIAL_1_COMPONENT_H

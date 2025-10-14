@@ -14,13 +14,29 @@
 class RenderSystem {
 public:
     void render(std::vector<std::unique_ptr<Entity>> & entities) {
+
+        Entity* cameraEntity = nullptr;
+
+        // Find camera
+        for (auto& e : entities) {
+            if (e->hasComponent<Camera>()) {
+                cameraEntity = e.get();
+                break;
+            }
+        }
+
+        if (!cameraEntity) return; // no camera
+        auto& cam = cameraEntity->getComponent<Camera>();
+
+
         for (auto& entity: entities) {
             if (entity->hasComponent<Transform>() && entity->hasComponent<Sprite>()) {
                 auto& tr = entity->getComponent<Transform>();
                 auto& sprite = entity->getComponent<Sprite>();
 
-                sprite.dst.x = tr.position.x;
-                sprite.dst.y = tr.position.y;
+                // We are converting from world space to screen space.
+                sprite.dst.x = tr.position.x - cam.view.x;
+                sprite.dst.y = tr.position.y - cam.view.y;
 
                 // If the entity has an animation component, update the source rect
                 if (entity->hasComponent<Animation>()) {

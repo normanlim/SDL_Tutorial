@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "AnimationSystem.h"
+#include "CameraSystem.h"
 #include "CollisionSystem.h"
 #include "Component.h"
 #include "Entity.h"
@@ -27,6 +28,7 @@ class World {
     KeyboardInputSystem keyboardInputSystem;
     CollisionSystem collisionSystem;
     AnimationSystem animationSystem;
+    CameraSystem cameraSystem;
     EventManager eventManager;
 
 public:
@@ -36,10 +38,17 @@ public:
         movementSystem.update(entities, dt);
         collisionSystem.update(*this);
         animationSystem.update(entities, dt);
+        cameraSystem.update(entities);
         cleanup();
     }
     void render() {
-        map.draw();
+
+        for ( auto& entity : entities ) {
+            if (entity->hasComponent<Camera>()) {
+                map.draw(entity->getComponent<Camera>());
+                break;
+            }
+        }
         renderSystem.render(entities);
     }
 
