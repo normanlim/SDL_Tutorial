@@ -51,6 +51,20 @@ void Map::load(const char *path, SDL_Texture *ts) {
         colliders.push_back(c);
     }
 
+    // Parse spawn points
+    auto* spawnPointGroup = objectGroup->NextSiblingElement("objectgroup");
+    if (spawnPointGroup) {
+        for (auto* obj = spawnPointGroup->FirstChildElement("object");
+             obj != nullptr;
+             obj = obj->NextSiblingElement("object"))
+        {
+            SpawnPoint sp;
+            sp.x = obj->FloatAttribute("x");
+            sp.y = obj->FloatAttribute("y");
+            spawnPoints.push_back(sp);
+        }
+    }
+
 }
 
 void Map::draw() {

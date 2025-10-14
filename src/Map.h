@@ -9,6 +9,11 @@
 #include <SDL3/SDL.h>
 #include <Component.h>
 
+struct SpawnPoint {
+    float x;
+    float y;
+};
+
 class Map {
 public:
     Map() = default;
@@ -23,6 +28,9 @@ public:
     int width{}, height{};
     std::vector<std::vector<int>> tileData;
     std::vector<Collider> colliders;
+
+    // Assignment 6...
+    std::vector<SpawnPoint> spawnPoints;
 
 private:
 

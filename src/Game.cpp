@@ -91,22 +91,40 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
         e.addComponent<Sprite>(tex,colSrc,colDst);
 
     }
+
+    // Add coins from our map
+    SDL_Texture* coinTex = TextureManager::load("../asset/coin.png");
+    for (auto& spawnPoint : world.getMap().spawnPoints) {
+        auto& item(world.createEntity());
+        auto& itemTransform = item.addComponent<Transform>(Vector2D(spawnPoint.x, spawnPoint.y), 0.0f, 1.0f);
+
+        SDL_FRect itemSrc { 0,0,32,32 };
+        SDL_FRect itemDest { itemTransform.position.x, itemTransform.position.y, 32, 32 };
+        item.addComponent<Sprite>(coinTex, itemSrc, itemDest);
+
+        auto& itemCollider = item.addComponent<Collider>("item");
+        itemCollider.rect.w = itemDest.w;
+        itemCollider.rect.h = itemDest.h;
+    }
+
+
+
     // map = new Map(); // Removed lecture 6
     //player = new GameObject("../asset/ball.png", 0, 0);
 
     // Add entities
-    auto& item(world.createEntity());
-    auto& itemTransform = item.addComponent<Transform>(Vector2D(200,100), 0.0f, 1.0f);
-
-    SDL_Texture* itemTex = TextureManager::load("../asset/coin.png");
-    SDL_FRect itemSrc { 0,0,32,32 };
-
-    SDL_FRect itemDest { itemTransform.position.x, itemTransform.position.y, 32, 32 };
-    item.addComponent<Sprite>(itemTex, itemSrc, itemDest);
-
-    auto& itemCollider = item.addComponent<Collider>("item");
-    itemCollider.rect.w = itemDest.w;
-    itemCollider.rect.h = itemDest.h;
+    // auto& item(world.createEntity());
+    // auto& itemTransform = item.addComponent<Transform>(Vector2D(200,100), 0.0f, 1.0f);
+    //
+    // SDL_Texture* itemTex = TextureManager::load("../asset/coin.png");
+    // SDL_FRect itemSrc { 0,0,32,32 };
+    //
+    // SDL_FRect itemDest { itemTransform.position.x, itemTransform.position.y, 32, 32 };
+    // item.addComponent<Sprite>(itemTex, itemSrc, itemDest);
+    //
+    // auto& itemCollider = item.addComponent<Collider>("item");
+    // itemCollider.rect.w = itemDest.w;
+    // itemCollider.rect.h = itemDest.h;
 
 
 
