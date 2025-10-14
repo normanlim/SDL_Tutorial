@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 
+#include "AnimationSystem.h"
 #include "CollisionSystem.h"
 #include "Component.h"
 #include "Entity.h"
@@ -25,6 +26,7 @@ class World {
     RenderSystem renderSystem;
     KeyboardInputSystem keyboardInputSystem;
     CollisionSystem collisionSystem;
+    AnimationSystem animationSystem;
     EventManager eventManager;
 
 public:
@@ -33,6 +35,7 @@ public:
         keyboardInputSystem.update(entities, event);
         movementSystem.update(entities, dt);
         collisionSystem.update(*this);
+        animationSystem.update(entities, dt);
         cleanup();
     }
     void render() {

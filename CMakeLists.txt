@@ -31,7 +31,8 @@ add_executable(Tutorial_1 src/main.cpp
         src/utils/Collision.cpp
         src/ecs/system/CollisionSystem.cpp
         src/ecs/World.cpp
-        src/vendor/tinyxml2.cpp)
+        src/vendor/tinyxml2.cpp
+        src/AssetManager.cpp)
 
 target_link_libraries(Tutorial_1
     SDL3

@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <vector>
 #include "Game.h"
+
+#include "AssetManager.h"
 #include "Map.h"
 //#include "GameObject.h"
 
@@ -73,12 +75,17 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
         isRunning = false;
     }
 
+    AssetManager::loadAnimation("player","../asset/animations/bull_animations.xml");
+
+
     // Load our map
     world.getMap().load("../asset/map.tmx", TextureManager::load("../asset/tileset.png"));
+
+    // Add colliders
     for (auto &collider : world.getMap().colliders) {
         auto& e = world.createEntity();
         e.addComponent<Transform>(Vector2D(collider.rect.x, collider.rect.y), 0.0f, 1.0f);
-        auto& c = e.addComponent<Collider>("wall");
+        auto& c = e.addComponent<Collider>("no-wall");
         c.rect.x = collider.rect.x;
         c.rect.y = collider.rect.y;
         c.rect.w = collider.rect.w;
@@ -133,9 +140,13 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
     auto& playerTransform = player.addComponent<Transform>(Vector2D(0,0), 0.0f, 1.0f);
     player.addComponent<Velocity>(Vector2D(0.0f, 0.0f), 60.0f); // Add number here for initial velocity on gameload
 
-    SDL_Texture* tex = TextureManager::load("../asset/mario.png");
-    SDL_FRect playerSrc { 0,0,32,44};
-    SDL_FRect playerDst { playerTransform.position.x, playerTransform.position.y, 64, 88};
+    Animation anim = AssetManager::getAnimation("player");
+    player.addComponent<Animation>(anim);
+
+    SDL_Texture* tex = TextureManager::load("../asset/animations/bull_anim.png");
+    // SDL_FRect playerSrc { 0,0,32,44};
+    SDL_FRect playerSrc = anim.clips[anim.currentClip].frameIndicies[0]; // new one for bull
+    SDL_FRect playerDst { playerTransform.position.x, playerTransform.position.y, 64, 64};
 
     player.addComponent<Sprite>(tex, playerSrc, playerDst);
 

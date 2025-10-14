@@ -20,7 +20,7 @@ World::World() {
     eventManager.subscribe<CollisionEvent>([](const CollisionEvent& collision){
         if (collision.entityA == nullptr || collision.entityB == nullptr) return;
 
-        if (!collision.entityA->hasComponent<Collider>() && collision.entityB->hasComponent<Collider>()) return;
+        if (!collision.entityA->hasComponent<Collider>() &&  collision.entityB->hasComponent<Collider>()) return;
 
         auto& colliderA = collision.entityA->getComponent<Collider>();
         auto& colliderB = collision.entityB->getComponent<Collider>();
