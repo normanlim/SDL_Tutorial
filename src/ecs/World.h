@@ -11,17 +11,21 @@
 #include "CameraSystem.h"
 #include "CollisionSystem.h"
 #include "Component.h"
+#include "DestructionSystem.h"
 #include "Entity.h"
 #include "EventManager.h"
 #include "KeyboardInputSystem.h"
 #include "Map.h"
 #include "MovementSystem.h"
 #include "RenderSystem.h"
+#include "SpawnTimerSystem.h"
 
 class World {
     Map map;
 
     std::vector<std::unique_ptr<Entity>> entities;
+    std::vector<std::unique_ptr<Entity>> deferredEntities;
+
 
     MovementSystem movementSystem;
     RenderSystem renderSystem;
@@ -30,6 +34,8 @@ class World {
     AnimationSystem animationSystem;
     CameraSystem cameraSystem;
     EventManager eventManager;
+    SpawnTimerSystem spawnTimerSystem;
+    DestructionSystem destructionSystem;
 
 public:
     World();
@@ -39,6 +45,9 @@ public:
         collisionSystem.update(*this);
         animationSystem.update(entities, dt);
         cameraSystem.update(entities);
+        spawnTimerSystem.update(entities, dt);
+        destructionSystem.update(entities);
+        synchronizeEntities();
         cleanup();
     }
     void render() {
@@ -58,6 +67,11 @@ public:
         return *entities.back();
     }
 
+    Entity& createDeferredEntity() {
+        deferredEntities.emplace_back(std::make_unique<Entity>());
+        return *deferredEntities.back();
+    }
+
     std::vector<std::unique_ptr<Entity>>& getEntities() {
         return entities;
     }
@@ -71,6 +85,19 @@ public:
                     return !e->isActive();
                 }
         );
+    }
+
+    void synchronizeEntities() {
+        if (!deferredEntities.empty()) {
+            // push back all deferred entities to the entities vector
+            std::move(
+                deferredEntities.begin(),
+                deferredEntities.end(),
+                std::back_inserter(entities)
+            );
+            // clearing the creation buffer
+            deferredEntities.clear();
+        };
     }
 
     EventManager& getEventManager() { return eventManager; }

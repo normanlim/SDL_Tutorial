@@ -5,6 +5,8 @@
 #ifndef TUTORIAL_1_COMPONENT_H
 #define TUTORIAL_1_COMPONENT_H
 
+#include <functional>
+
 #include "SDL3/SDL_render.h"
 #include "Vector2D.h"
 #include <string>
@@ -57,6 +59,18 @@ struct Camera {
     float worldHeight;
 };
 
+struct TimedSpawner {
+    float spawnInterval{};
+    std::function<void()> spawnCallback;
+    float timer{};
+};
+
+// Our game state, might have multiple scenes
+struct SceneState {
+    int coinsCollected = 0;
+};
+
 struct PlayerTag{};
+struct ProjectileTag{};
 
 #endif //TUTORIAL_1_COMPONENT_H

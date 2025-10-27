@@ -13,7 +13,7 @@ public:
     void update(const std::vector<std::unique_ptr<Entity>>& entities, const SDL_Event& event) {
 
         for (auto& e : entities) {
-            if (e->hasComponent<Velocity>()) {
+            if (e->hasComponent<PlayerTag>() && e->hasComponent<Velocity>()) {
                 // should have 1 source of truth, only 1 file should handle all the movement, not multiple places
                 auto& v = e->getComponent<Velocity>();
                 if (event.type == SDL_EVENT_KEY_DOWN) {

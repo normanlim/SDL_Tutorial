@@ -76,6 +76,7 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
     }
 
     AssetManager::loadAnimation("player","../asset/animations/piggy_animations.xml");
+    AssetManager::loadAnimation("enemy","../asset/animations/bird_animations.xml");
 
 
     // Load our map
@@ -162,18 +163,41 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
 
     player.addComponent<PlayerTag>();
 
+    auto& spawner(world.createEntity());
+    Transform t = spawner.addComponent<Transform>(Vector2D(width/2, height-5), 0.0f, 1.0);
+    spawner.addComponent<TimedSpawner>(2.0f, [this, t] {
+       // Create our projectile
+       auto& e(world.createDeferredEntity());
+        e.addComponent<Transform>(Vector2D(t.position.x, t.position.y), 0.0f, 1.0f);
+        e.addComponent<Velocity>(Vector2D(0,-1), 100.0f);
+
+        Animation anim = AssetManager::getAnimation("enemy");
+        e.addComponent<Animation>(anim);
+
+        SDL_Texture* tex = TextureManager::load("../asset/animations/bird_anim.png");
+        SDL_FRect src {0,0,32,32};
+        SDL_FRect dest {t.position.x, t.position.y, 32, 32};
+        e.addComponent<Sprite>(tex,src,dest);
+
+        Collider c = e.addComponent<Collider>("projectile");
+        c.rect.w = dest.w;
+        c.rect.h = dest.h;
+        e.addComponent<ProjectileTag>();
+
+    });
+
 
 
     // Assignment 4 validation (need to print?)
-    Vector2D a(3, 4);
-    Vector2D b(1, 2);
-
-    a += b;              // a is now (4, 6)
-    Vector2D c = a - b;  // c is (3, 4)
-    Vector2D d = a * 2;  // d is (8, 12)
-    Vector2D e = 2 * a;  // e is also (8, 12)
-    Vector2D f = -a;     // f is (-4, -6)
-    bool same = (a == b); // false
+    // Vector2D a(3, 4);
+    // Vector2D b(1, 2);
+    //
+    // a += b;              // a is now (4, 6)
+    // Vector2D c = a - b;  // c is (3, 4)
+    // Vector2D d = a * 2;  // d is (8, 12)
+    // Vector2D e = 2 * a;  // e is also (8, 12)
+    // Vector2D f = -a;     // f is (-4, -6)
+    // bool same = (a == b); // false
 
 
 
