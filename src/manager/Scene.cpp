@@ -17,7 +17,7 @@ Scene::Scene(const char* sceneName, const char* mapPath, const int windowWidth, 
     for (auto &collider : world.getMap().colliders) {
         auto& e = world.createEntity();
         e.addComponent<Transform>(Vector2D(collider.rect.x, collider.rect.y), 0.0f, 1.0f);
-        auto& c = e.addComponent<Collider>("no-wall");
+        auto& c = e.addComponent<Collider>("wall");
         c.rect.x = collider.rect.x;
         c.rect.y = collider.rect.y;
         c.rect.w = collider.rect.w;
