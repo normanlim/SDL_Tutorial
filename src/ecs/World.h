@@ -39,7 +39,7 @@ class World {
 
 public:
     World();
-    void update(float dt, SDL_Event& event) {
+    void update(float dt, const SDL_Event& event) {
         keyboardInputSystem.update(entities, event);
         movementSystem.update(entities, dt);
         collisionSystem.update(*this);

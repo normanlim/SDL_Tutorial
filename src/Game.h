@@ -10,6 +10,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include "World.h"
+#include "manager/SceneManager.h"
 
 class Game {
 public:
@@ -21,7 +22,7 @@ public:
 
     // game loop functions (handleEvents, update, render)
     void handleEvents(); // checks for input and system events
-    void update(); // handles the drawing of the current game state to the screen
+    void update(float dt); // handles the drawing of the current game state to the screen
     void render(); // handles the drawing of the current game state to the screen
 
     // used to free resources (destructor)
@@ -32,9 +33,10 @@ public:
         // This way we can only read to it not write
     }
 
-    World world;
-
     SDL_Renderer* renderer = nullptr;
+
+    SceneManager sceneManager;
+    static std::function<void(std::string)> onSceneChangeRequest;
 
 private:
     int frameCount = 0;

@@ -19,7 +19,7 @@ int main() {
         ticks = SDL_GetTicks(); // time in milliseconds since we initialized SDL
 
         game -> handleEvents();
-        game -> update();
+        game -> update({});
         game -> render();
 
         actualFrameTime = SDL_GetTicks(); // elapsed time in ms to run the above 3 functions (depends on hardware)
