@@ -166,42 +166,39 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
 
     /////
 
-    std::cout << "Creating spawner entity..." << std::endl;
     auto& spawner(world.createEntity());
-    std::cout << "Adding Transform to spawner..." << std::endl;
-    Transform t = spawner.addComponent<Transform>(Vector2D(width/2, height-5), 0.0f, 1.0);
-    std::cout << "Transform added at: " << t.position.x << ", " << t.position.y << std::endl;
+    Transform transform = spawner.addComponent<Transform>(Vector2D(width/2, height - 5), 0.0f, 1.0f);
 
-    std::cout << "Adding TimedSpawner component..." << std::endl;
-    spawner.addComponent<TimedSpawner>(2.0f, [this, t] {
-        std::cout << "SPAWNER CALLBACK TRIGGERED!" << std::endl;
-        std::cout << "Creating deferred entity..." << std::endl;
+    Entity* spawnPtr = &spawner;
 
+    spawner.addComponent<TimedSpawner>(2.0f, [this, spawnPtr] {
+        std::cout << "Spawning" << std::endl;
+        if (!spawnPtr->isActive()) return;
+
+        auto& transform = spawnPtr->getComponent<Transform>();
         auto& e(world.createDeferredEntity());
-        std::cout << "Adding transform to projectile at: " << t.position.x << ", " << t.position.y << std::endl;
-        e.addComponent<Transform>(Vector2D(t.position.x, t.position.y), 0.0f, 1.0f);
-        e.addComponent<Velocity>(Vector2D(0,-1), 100.0f);
+        std::cout << "Entity created"<< std::endl;
+        e.addComponent<Transform>(Vector2D(400,175), 0.0f, 1.0f);
+        e.addComponent<Velocity>(Vector2D(0.0f, -1.0f), 100.0f);
 
-        std::cout << "Loading animation..." << std::endl;
-        Animation anim = AssetManager::getAnimation("enemy");
-        e.addComponent<Animation>(anim);
+        Animation animation = AssetManager::getAnimation("enemy");
+        e.addComponent<Animation>(animation);
 
-        std::cout << "Loading texture..." << std::endl;
-        SDL_Texture* tex = TextureManager::load("../asset/animations/bird_anim.png");
-        SDL_FRect src {0,0,32,32};
-        SDL_FRect dest {t.position.x, t.position.y, 32, 32};
-        e.addComponent<Sprite>(tex,src,dest);
+        SDL_Texture* texture = TextureManager::load("../asset/animations/bird_anim.png");
+        SDL_FRect src = {0,0,32,32};
+        SDL_FRect dest = {transform.position.x,transform.position.y,32,32};
+        e.addComponent<Sprite>(texture, src, dest);
 
-        std::cout << "Adding collider..." << std::endl;
-        auto& c = e.addComponent<Collider>("projectile");
-        c.rect.w = dest.w;
-        c.rect.h = dest.h;
+        Collider collider = e.addComponent<Collider>("projectile");
+        collider.rect.w = dest.w;
+        collider.rect.h = dest.h;
+
         e.addComponent<ProjectileTag>();
 
-        std::cout << "Projectile created successfully!" << std::endl;
+        std::cout << "Entity fully configured!" << std::endl;
     });
-    std::cout << "TimedSpawner component added!" << std::endl;
 
+    std::cout << "yay" << std::endl;
 
 
     // Assignment 4 validation (need to print?)
