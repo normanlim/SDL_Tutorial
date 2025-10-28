@@ -4,8 +4,8 @@
 
 #ifndef TUTORIAL_1_KEYBOARDINPUTSYSTEM_H
 #define TUTORIAL_1_KEYBOARDINPUTSYSTEM_H
-#include <SDL3/SDL_events.h>
 
+#include <SDL3/SDL_events.h>
 #include "Component.h"
 
 class KeyboardInputSystem {

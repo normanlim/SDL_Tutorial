@@ -61,7 +61,7 @@ struct Camera {
 
 struct TimedSpawner {
     float spawnInterval{};
-    std::function<void()> spawnCallback;
+    std::function<void()> spawnCallback{};
     float timer{};
 };
 

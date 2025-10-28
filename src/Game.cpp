@@ -163,28 +163,44 @@ void Game::init(const char *title, int width, int height, bool fullscreen) {
 
     player.addComponent<PlayerTag>();
 
+
+    /////
+
+    std::cout << "Creating spawner entity..." << std::endl;
     auto& spawner(world.createEntity());
+    std::cout << "Adding Transform to spawner..." << std::endl;
     Transform t = spawner.addComponent<Transform>(Vector2D(width/2, height-5), 0.0f, 1.0);
+    std::cout << "Transform added at: " << t.position.x << ", " << t.position.y << std::endl;
+
+    std::cout << "Adding TimedSpawner component..." << std::endl;
     spawner.addComponent<TimedSpawner>(2.0f, [this, t] {
-       // Create our projectile
-       auto& e(world.createDeferredEntity());
+        std::cout << "SPAWNER CALLBACK TRIGGERED!" << std::endl;
+        std::cout << "Creating deferred entity..." << std::endl;
+
+        auto& e(world.createDeferredEntity());
+        std::cout << "Adding transform to projectile at: " << t.position.x << ", " << t.position.y << std::endl;
         e.addComponent<Transform>(Vector2D(t.position.x, t.position.y), 0.0f, 1.0f);
         e.addComponent<Velocity>(Vector2D(0,-1), 100.0f);
 
+        std::cout << "Loading animation..." << std::endl;
         Animation anim = AssetManager::getAnimation("enemy");
         e.addComponent<Animation>(anim);
 
+        std::cout << "Loading texture..." << std::endl;
         SDL_Texture* tex = TextureManager::load("../asset/animations/bird_anim.png");
         SDL_FRect src {0,0,32,32};
         SDL_FRect dest {t.position.x, t.position.y, 32, 32};
         e.addComponent<Sprite>(tex,src,dest);
 
-        Collider c = e.addComponent<Collider>("projectile");
+        std::cout << "Adding collider..." << std::endl;
+        auto& c = e.addComponent<Collider>("projectile");
         c.rect.w = dest.w;
         c.rect.h = dest.h;
         e.addComponent<ProjectileTag>();
 
+        std::cout << "Projectile created successfully!" << std::endl;
     });
+    std::cout << "TimedSpawner component added!" << std::endl;
 
 
 
