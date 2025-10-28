@@ -146,31 +146,12 @@ void Game::update(float dt) {
 
 void Game::render() {
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // Get current time
 
-//    // Check if it's time to change color
-//    if (currentTime - lastColorChange > COLOR_CHANGE_INTERVAL) {
-//        currentColorIndex = (currentColorIndex + 1) % colors.size();
-//        lastColorChange = currentTime;
-//    }
-
-    // Get current color from the list
-    // Color currentColor = colors[currentColorIndex];
-    ///////////////////////////////////////////////////////////////////////////////////////
-
-//    SDL_SetRenderDrawColor(renderer, currentColor.r, currentColor.g, currentColor.b, currentColor.a);
-//    SDL_RenderClear(renderer); // every frame the renderer is cleared with the draw color
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer); // every frame the renderer is cleared with the draw color
 
-    // All your drawing will go here...
-    // map->draw();
-    //player->draw();
-
-    // display everything that was just drawn
-    // draws it in memory first to a back buffer
+    sceneManager.render();
 
     // swaps the back buffer to the screen
     SDL_RenderPresent(renderer);
